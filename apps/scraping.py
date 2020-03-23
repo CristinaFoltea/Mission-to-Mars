@@ -6,7 +6,7 @@ import pandas as pd
 
 def scrape_all():
   # Initiate headless driver for deployment
-  browser = Browser("chrome", executable_path="chromedriver", headless=True)
+  browser = Browser("chrome", executable_path="chromedriver", headless="true")
   news_title, news_paragraph = mars_news(browser)
   # Run all scraping functions and store results in dictionary
   data = {
@@ -14,12 +14,10 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        'hemi_data': mars_hemispheres(browser)
   }
-
-# Set the executable path and initialize the chrome browser in splinter
-executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
-browser = Browser('chrome', **executable_path)
+  return data
 
 ### Mars news
 def mars_news(browser):
@@ -85,8 +83,68 @@ def mars_facts():
   df.set_index('description', inplace=True)
   return df.to_html()
 
+def mars_hemispheres(browser):
+  # Visit mars hemispheres page
+  url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+  browser.visit(url)
+
+  # Parse the resulting html with soup
+  html = browser.html
+  hm_soup = BeautifulSoup(html, 'html.parser')
+
+  # empty list that will contain the collected data
+  list_hm = []
+
+  # Get list of individual hemisphere element
+  try:
+    wrapper = hm_soup.select_one("#product-section")
+    list_hm_el = wrapper.select(".item")
+  except BaseException:
+    return [
+        {
+            "title": "kitty1",
+            "image_url": "https://live.staticflickr.com/3397/3551189653_501acccd41_b.jpg"
+        },
+        {
+            "title": "kitty2",
+            "image_url": "https://live.staticflickr.com/3397/3551189653_501acccd41_b.jpg"
+        },
+        {
+            "title": "kitty3",
+            "image_url": "https://live.staticflickr.com/3397/3551189653_501acccd41_b.jpg"
+        },
+        {
+            "title": "kitty4",
+            "image_url": "https://live.staticflickr.com/3397/3551189653_501acccd41_b.jpg"
+        }
+    ]
+
+  # loop though the list to gather extra data for individual hemisphere
+  for index, hm in enumerate(list_hm_el):
+    # instantiate a new hemisphere object 
+    hemi = {
+        'title': "",
+        'image_url': ""
+    }
+    try:
+      title_el = hm.select_one('.description h3')
+      title = title_el.get_text()
+      link = browser.find_by_css('.description')[index].find_by_tag("a")
+      link.click()
+      img_soup = BeautifulSoup(browser.html, 'html.parser')
+      img_src = img_soup.select_one('#wide-image img.wide-image').get("src")
+      # insert new data
+      hemi = {
+        'title': title,
+        'image_url': f'https://astrogeology.usgs.gov/{img_src}'
+      }
+    except BaseException:
+      continue
+    list_hm.append(hemi)
+    browser.back()
+  return list_hm
+
+
 if __name__ == "__main__":
     # If running as script, print scraped data
     print(scrape_all())
-    
-browser.quit()

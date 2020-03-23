@@ -10,3 +10,5 @@ pip install bs4
 brew tap mongodb/brew
 brew install mongodb-community@4.2
 brew services start mongodb-community@4.2
+
+pip install Flask-PyMongo

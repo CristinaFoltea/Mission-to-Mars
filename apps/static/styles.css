@@ -1,0 +1,73 @@
+/* font-family: 'Roboto', sans-serif;
+font-family: 'Baloo Da 2', cursive;
+font-family: 'Roboto Condensed', sans-serif;
+font-family: 'Nanum Gothic', sans-serif;
+font-family: 'Patua One', cursive; */
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2 {
+  font-family: 'Patua One', cursive
+}
+
+.jumbotron  {
+  background-image: url("images/mars-bg.jpeg");
+  background-size: cover;
+}
+
+.jumbotron .btn-primary {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.jumbotron .btn-primary:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+#mars-news h4{
+  opacity: 0.7;
+}
+
+#mars-facts {
+  padding-top: 50px;
+}
+
+#mars-facts h4 {
+  font-family: 'Patua One', cursive;
+}
+
+#mars-facts table {
+  border-color: transparent;
+  padding-right: 10px
+}
+
+#mars-facts thead {
+  display: none;
+}
+#mars-facts tr {
+  line-height: 2em;
+}
+
+#mars-facts tr th {
+  padding-left: 3px;
+  padding-right: 20px;
+  font-weight: 500;
+}
+
+#mars-facts tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#mars-hemispheres-image img {
+  width: 100%;
+  height: auto;
+}
+
+#mars-hemispheres-image .card:nth-of-type(1) {
+  padding-left: 0;
+}
+#mars-hemispheres-image .card:nth-of-type(4) {
+  padding-right: 0;
+}
